@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 
-export default function App() {
+export default function ListChooseArtifactComponent() {
     return (
         <View style={styles.container}>
             <Text>Hello World</Text>

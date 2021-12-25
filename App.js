@@ -1,42 +1,75 @@
+import LoginComponent from "./components/Login"
+import SignupComponent from "./components/Signup"
+import AccountSettingsComponent from "./components/AccountSettings"
+import HomePageComponent from "./components/HomePage"
 
-const loginComponent = require("./components/Login")
-const signupComponent = require("./components/Signup")
-const accountSettingsComponent = require("./components/AccountSettings")
+import ListArtifactComponent from "./components/ListArtifact"
+import ListCharacterComponent from "./components/ListCharacter"
+import ListWeaponComponent from "./components/ListWeapon"
+import ListTeamComponent from "./components/ListTeam"
 
-const listArtifactComponent = require("./components/ListArtifact")
-const listCharacterComponent = require("./components/ListCharacter")
-const listWeaponComponent = require("./components/ListWeapon")
-const listTeamComponent = require("./components/ListTeam")
+import SingleArtifactComponent from "./components/SingleArtifact"
+import SingleWeaponComponent from "./components/SingleWeapon"
+import SingleCharacterComponent from "./components/SingleCharacter"
+import SingleTeamComponent from "./components/SingleTeam"
 
-const singleArtifactComponent = require("./components/SingleArtifact")
-const singleWeaponComponent = require("./components/SingleWeapon")
-const singleCharacterComponent = require("./components/SingleCharacter")
-const singleTeamComponent = require("./components/SingleTeam")
+import ListChooseArtifactComponent from "./components/ListChooseArtifact"
+import ListChooseWeaponComponent from "./components/ListChooseWeapon"
+import ListChooseCharacterComponent from "./components/ListChooseCharacter"
 
-const listChooseArtifactComponent = require("./components/ListChooseArtifact")
-const listChooseWeaponComponent = require("./components/ListChooseWeapon")
-const listChooseCharacterComponent = require("./components/ListChooseCharacter")
-
-
-import {React, useState} from 'react';
+import { useState } from 'react';
 
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack'; 
-
-
-
-
-
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 
 const Stack = createNativeStackNavigator();
+const Drawer = createDrawerNavigator();
+
+const screens = {
+  Login : "Login",
+  Signup: "Signup",
+  AccountSettings: "Account Settings",
+  ListArtifacts: "All Artifacts",
+  ListWeapons: "All Weapons",
+  ListCharacters: "All Characters",
+  ListTeams: "All Teams ",
+  SingleArtifact: "SingleArtifact",
+  SingleWeapon: "SingleWeapon",
+  SingleCharacter: "SingleCharacter",
+  SingleTeam: "SingleTeam",
+  ChooseArtifact: "ChooseArtifact",
+  ChooseWeapon: "ChooseWeapon",
+  ChooseCharacter: "ChooseCharacter",
+
+  Drawer: "Drawer",
+  Homepage: "Home"
+};
+
+
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='LoginScreen' screenOptions={{headerShown:false}}>
-        <Stack.Screen name='Login' component={loginComponent} />
+      <Stack.Navigator initialRouteName={screens.Drawer} screenOptions={{headerShown:false}}>
+        <Stack.Screen name={screens.Login} component={LoginComponent} />
+        <Stack.Screen name={screens.Signup} component={SignupComponent} />
+        <Stack.Screen name={screens.Drawer} component={({ navigation, routes }) => {
+          return(
+              <NavigationContainer independent={true}>
+                <Drawer.Navigator initialRouteName={screens.Homepage}>
+                  <Drawer.Screen name = {screens.Homepage} component={HomePageComponent}/>
+                  <Drawer.Screen name = {screens.ListCharacters} component={ListCharacterComponent}/>
+                  <Drawer.Screen name = {screens.ListArtifacts} component={ListArtifactComponent}/>
+                  <Drawer.Screen name = {screens.ListWeapons} component={ListWeaponComponent}/>
+                  <Drawer.Screen name = {screens.ListTeams} component={ListTeamComponent}/>
+                  <Drawer.Screen name = {screens.AccountSettings} component={AccountSettingsComponent}/>
+                </Drawer.Navigator>
+              </NavigationContainer>
+          )
+        }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -53,7 +86,7 @@ const styles = StyleSheet.create({
   image: {
     marginBottom: 40,
   },
- 
+
   inputView: {
     backgroundColor: "gray",
     borderRadius: 30,
@@ -62,19 +95,19 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     alignItems: "center",
   },
- 
+
   textInput: {
     height: 50,
     flex: 1,
     padding: 10,
     marginLeft: 20,
   },
- 
+
   forgot_button: {
     height: 30,
     marginBottom: 30,
   },
- 
+
   loginBtn: {
     width: "80%",
     borderRadius: 25,
