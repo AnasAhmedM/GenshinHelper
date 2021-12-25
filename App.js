@@ -28,44 +28,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 
 
-function LoginScreen({ navigation, route}) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
- 
-  return (
-    <View style={styles.container}>
-    
-      <Icon name='person' color='black' size={256}/>
-      <StatusBar style="auto" />
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.textInput}
-          placeholder="Email."
-          placeholderTextColor="black"
-          onChangeText={(email) => setEmail(email)}
-        />
-      </View>
- 
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.textInput}
-          placeholder="Password."
-          placeholderTextColor="black"
-          secureTextEntry={true}
-          onChangeText={(password) => setPassword(password)}
-        />
-      </View>
- 
-      <TouchableOpacity>
-        <Text style={styles.forgot_button}>Forgot Password?</Text>
-      </TouchableOpacity>
- 
-      <TouchableOpacity style={styles.loginBtn}>
-        <Text style={styles.loginText}>LOGIN</Text>
-      </TouchableOpacity>
-    </View>
-  );
-}
+
 
 const Stack = createNativeStackNavigator();
 
@@ -73,7 +36,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName='LoginScreen' screenOptions={{headerShown:false}}>
-        <Stack.Screen name='Login' component={LoginScreen} />
+        <Stack.Screen name='Login' component={loginComponent} />
       </Stack.Navigator>
     </NavigationContainer>
   );
