@@ -28,6 +28,18 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
+// NOTE for Anas : import this in all files you need
+import firebase from "firebase/compat"
+
+// NOTE for Anas : this line only needs to be called once. (kinda like mongoose.connect)
+firebase.initializeApp(require("./config/firebaseConfig").firebaseConfig)
+
+// NOTE for Anas : since gameData is public, we can access it without logging in, but we will need auth for other data like userdata
+firebase.database().ref('gameData/').once('value', function (snapshot) {
+  // NOTE for Anas : this is the data
+  console.log(snapshot.val())
+});
+
 const screens = {
   Login : "Login",
   Signup: "Signup",
