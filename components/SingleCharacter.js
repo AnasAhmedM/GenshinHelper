@@ -18,10 +18,11 @@ export default function SingleCharacterComponent({ navigation, route }) {
                         <View >
                             <Image style={{height:60, width:60, borderRadius:20, alignSelf:'center'}} source={{ uri: data.icon}}/>
                         </View>}
-                    right={props=> <View >
-                       <Image style={{height:40, width:40, borderRadius:20, alignSelf:'center'}} source={{ uri: element }}/>
-                       <Text style={{alignSelf:'center'}} source={{ uri: element }}>{data.element}</Text>
-                    </View>}
+                    right={props=> 
+                        <View>
+                            <Image style={{height:40, width:40, borderRadius:20, alignSelf:'center'}} source={{ uri: element }}/>
+                            <Text style={{alignSelf:'center'}}>{data.element}</Text>
+                        </View>}
                     />
                 <Card.Content style={{flexDirection:'row', justifyContent:'center'}}>
                     {data.rarity>0?<Avatar.Icon style={{backgroundColor:'transparent'}}color='yellow' size={32} icon="star" />:null} 

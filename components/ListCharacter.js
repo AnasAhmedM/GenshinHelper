@@ -8,6 +8,7 @@ export default function ListCharacterComponent({ navigation, route }) {
     const [searchQuery, setSearchQuery] = useState('');
     const [data, setData] = useState([])
     const [elements, setElements] = useState({})
+    const [rarities, setRarities] = useState(['#8F6DA8', '#AA7A4F'])
 
     useEffect(()=>{
         if(data.length === 0)
@@ -36,7 +37,7 @@ export default function ListCharacterComponent({ navigation, route }) {
                     <List.Item
                         title={e.name}
                         description={e.description}
-                        left={props=> <Image style={{height:60, width:60, borderRadius:20, alignSelf:'center'}} source={{ uri: e.icon }}/>}
+                        left={props=> <Image  style={{height:80, width:80, backgroundColor:rarities[e.rarity-4], borderRadius:20, alignSelf:'center'}} source={{ uri: e.icon }}/>}
                         right={props=> <Image style={{height:40, width:40, borderRadius:20, alignSelf:'center'}} source={{ uri: elements[e.element] }}/>}
                         onPress={()=> navigation.navigate('SingleCharacter', {data: e, element: elements[e.element]})}
                     />
