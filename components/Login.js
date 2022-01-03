@@ -31,8 +31,8 @@ export default function LoginComponent({ navigation }) {
     }
 
     return (
-        <ImageBackground source={require("../resources/images/wallpaper.jpg")} style={styles.container}>
-            <Avatar.Image source={require("../resources/images/iconMain.png")} size={150} style={styles.iconImage} />
+        <ImageBackground source={require("../assets/images/wallpaper.jpg")} style={styles.container}>
+            <Avatar.Image source={require("../assets/images/iconMain.png")} size={150} style={styles.iconImage} />
             <View style={styles.inputView}>
                 <TextInput
                     style={styles.textInput}

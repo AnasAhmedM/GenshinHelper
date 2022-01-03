@@ -20,18 +20,16 @@ import ListChooseCharacterComponent from "./components/ListChooseCharacter"
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
-import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
+import { Avatar, DefaultTheme, Provider as PaperProvider} from 'react-native-paper';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
 import firebase from "firebase/compat"
-
+import { TouchableOpacity, Text, StyleSheet, View } from "react-native";
+import { useEffect, useState } from "react";
+import { ImageBackground } from "react-native";
 firebase.initializeApp(require("./config/firebaseConfig").firebaseConfig)
-
-firebase.database().ref('gameData/').once('value', function (snapshot) {
-  // console.log(snapshot.val())
-});
 
 const screens = require("./config/ScreensEnum")
 
@@ -61,13 +59,46 @@ export default function App() {
 }
 
 let DrawerComponent = ({ navigation }) => {
-    // firebase.auth().onAuthStateChanged(user => {
-    //     if (!user) navigation.navigate(screens.Login)
-    // });
+    const [currentUserData, setCurrentUserData] = useState({username:"", profilePicture: require("./assets/images/defaultProfilePicture.png")});
+    const [init, setInit] = useState(false)
+    useEffect(() => {
+        if (!init) {
+            setInit(true);
+            firebase.auth().onAuthStateChanged(user => {
+                if (!user) navigation.navigate(screens.Login)
+                else {
+                    firebase.database().ref(`userData/${user.uid}`).on("value", snapshot => {
+                        const value = snapshot.val()
+                        setCurrentUserData({
+                            username: value.username,
+                            profilePicture: value.profilePicture === undefined ? currentUserData.profilePicture : { uri: value.profilePicture }
+                        })
+                    })
+                }
+
+            });
+        }
+    })
+
     return(
         <Drawer.Navigator initialRouteName={screens.Homepage} drawerContent={props => {
             return (
                 <DrawerContentScrollView {...props}>
+                    <TouchableOpacity style={styles.banner} onPress={() => {props.navigation.navigate(screens.AccountSettings)}}>
+                        <ImageBackground
+                            source={require("./assets/images/wallpaper.jpg")}
+                            resizeMode="cover"
+                            style={styles.bannerBackground}>
+                            <View style={styles.bannerItemsContainer}>
+                                <Avatar.Image
+                                    size={60}
+                                    style={styles.bannerImage}
+                                    source={currentUserData.profilePicture}
+                                />
+                                <Text style={styles.bannerText}>{currentUserData.username}</Text>
+                            </View>
+                        </ImageBackground>
+                    </TouchableOpacity>
                     <DrawerItemList {...props} />
                     <DrawerItem label="Logout" onPress={() => {
                         firebase.auth().signOut().catch(err => {
@@ -122,7 +153,7 @@ let WeaponsComponent = () => {
 
 let TeamsComponent = () => {
     return(
-        <Stack.Navigator screenOptions={{
+        <Stack.Navigator initialRouteName={screens.SingleTeam} screenOptions={{
             headerShown: false
         }}>
             <Stack.Screen name = {screens.ListTeams} component={ListTeamComponent}/>
@@ -135,5 +166,30 @@ let TeamsComponent = () => {
 
 }
 
+const styles = StyleSheet.create({
+    banner:{
+        width: "100%",
+        justifyContent: "center",
+        alignItems: "center",
+        height: 150,
+        backgroundColor: theme.colors.primary
+    },
+    bannerImage:{
+
+    },
+    bannerItemsContainer:{
+        height: "100%",
+        justifyContent: "center",
+        padding: 20
+    },
+    bannerBackground:{
+        width: "100%",
+        height: "100%",
+    },
+    bannerText: {
+        fontWeight: "bold",
+        fontSize: 20
+    }
+})
 
 
