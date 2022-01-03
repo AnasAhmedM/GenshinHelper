@@ -1,19 +1,20 @@
 import {useState, useEffect} from 'react';
 import { StyleSheet, Text, Image, View, ScrollView, Alert } from 'react-native';
 import firebase from "firebase/compat"
-import { List } from 'react-native-paper';
+import { List, Divider, Searchbar} from 'react-native-paper';
 firebase.initializeApp(require("../config/firebaseConfig").firebaseConfig)
 
 export default function ListCharacterComponent({ navigation, route }) {
+    const [searchQuery, setSearchQuery] = useState('');
     const [data, setData] = useState([])
     const [elements, setElements] = useState({})
 
     useEffect(()=>{
-        if(data.length == 0)
+        if(data.length === 0)
         firebase.database().ref('gameData/Characters').once('value', function (snapshot) {
             setData(snapshot.val())
           });
-        if(elements.length == 0)
+        if(Object.keys(elements).length === 0)
         firebase.database().ref('gameData/Elements').once('value', function (snapshot) {
             setElements(snapshot.val())
         });
@@ -22,8 +23,14 @@ export default function ListCharacterComponent({ navigation, route }) {
     return (
         <View style={{flex:1, justifyContent:'center'}}>
         <View style={{height:'100%', borderWidth:1}}>
+          <Searchbar
+            placeholder="Search"
+            onChangeText={setSearchQuery}
+            value={searchQuery}
+          />
           <ScrollView>
             {data.map((e, ind) =>{
+              if(e.id.includes(searchQuery.toLowerCase()))
               return(
                   <View key={ind}>
                     <List.Item
@@ -31,8 +38,9 @@ export default function ListCharacterComponent({ navigation, route }) {
                         description={e.description}
                         left={props=> <Image style={{height:60, width:60, borderRadius:20, alignSelf:'center'}} source={{ uri: e.icon }}/>}
                         right={props=> <Image style={{height:40, width:40, borderRadius:20, alignSelf:'center'}} source={{ uri: elements[e.element] }}/>}
-                        onPress={()=> Alert.alert(e.name)}
+                        onPress={()=> navigation.navigate('SingleCharacter', {data: e, element: elements[e.element]})}
                     />
+                    <Divider/>
                   </View>
                 )
               })

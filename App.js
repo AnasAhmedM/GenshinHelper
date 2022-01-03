@@ -61,9 +61,9 @@ export default function App() {
 }
 
 let DrawerComponent = ({ navigation }) => {
-    firebase.auth().onAuthStateChanged(user => {
-        if (!user) navigation.navigate(screens.Login)
-    });
+    // firebase.auth().onAuthStateChanged(user => {
+    //     if (!user) navigation.navigate(screens.Login)
+    // });
     return(
         <Drawer.Navigator initialRouteName={screens.Homepage} drawerContent={props => {
             return (
