@@ -132,4 +132,8 @@ let TeamsComponent = () => {
             <Stack.Screen name = {screens.ChooseCharacter} component={ListChooseCharacterComponent}/>
         </Stack.Navigator>
     )
+
 }
+
+
+
