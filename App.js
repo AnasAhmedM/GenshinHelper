@@ -1,5 +1,3 @@
-import 'react-native-gesture-handler';
-
 import LoginComponent from "./components/Login"
 import SignupComponent from "./components/Signup"
 import AccountSettingsComponent from "./components/AccountSettings"
@@ -19,116 +17,119 @@ import ListChooseArtifactComponent from "./components/ListChooseArtifact"
 import ListChooseWeaponComponent from "./components/ListChooseWeapon"
 import ListChooseCharacterComponent from "./components/ListChooseCharacter"
 
-import { useState } from 'react';
-
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createDrawerNavigator } from '@react-navigation/drawer';
+import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
+import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
-// NOTE for Anas : import this in all files you need
 import firebase from "firebase/compat"
-import { getAuth, onAuthStateChanged } from "firebase/auth";
 
-// NOTE for Anas : this line only needs to be called once. (kinda like mongoose.connect)
 firebase.initializeApp(require("./config/firebaseConfig").firebaseConfig)
 
-// NOTE for Anas : since gameData is public, we can access it without logging in, but we will need auth for other data like userdata
 firebase.database().ref('gameData/').once('value', function (snapshot) {
-  // NOTE for Anas : this is the data
-  console.log(snapshot.val())
+  // console.log(snapshot.val())
 });
 
-const screens = {
-  Login : "Login",
-  Signup: "Signup",
-  AccountSettings: "Account Settings",
-  ListArtifacts: "All Artifacts",
-  ListWeapons: "All Weapons",
-  ListCharacters: "All Characters",
-  ListTeams: "All Teams ",
-  SingleArtifact: "SingleArtifact",
-  SingleWeapon: "SingleWeapon",
-  SingleCharacter: "SingleCharacter",
-  SingleTeam: "SingleTeam",
-  ChooseArtifact: "ChooseArtifact",
-  ChooseWeapon: "ChooseWeapon",
-  ChooseCharacter: "ChooseCharacter",
+const screens = require("./config/ScreensEnum")
 
-  Drawer: "Drawer",
-  Homepage: "Home"
+const theme = {
+    ...DefaultTheme,
+    roundness: 2,
+    colors: {
+        ...DefaultTheme.colors,
+        primary: '#4771a6',
+        accent: '#4771a6',
+    },
 };
-
 
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName={screens.Drawer} screenOptions={{headerShown:false}}>
-        <Stack.Screen name={screens.Login} component={LoginComponent} />
-        <Stack.Screen name={screens.Signup} component={SignupComponent} />
-        <Stack.Screen name={screens.Drawer} component={({ navigation, routes }) => {
-          onAuthStateChanged(getAuth(), (user) => {
-            if (user) {
-              console.log("User logged in", user.uid)
-            } else {
-              navigation.navigate(screens.Login);
-            }
-          });
-          // return (
-          //     <View>
-          //     </View>
-          // )
-          return(
-              <Drawer.Navigator initialRouteName={screens.Homepage}>
-                <Drawer.Screen name = {screens.Homepage} component={HomePageComponent}/>
-                <Drawer.Screen name = "Characters" component={() => {
-                  return(
-                      <Stack.Navigator >
-                        <Stack.Screen name = {screens.ListCharacters} component={ListCharacterComponent}/>
-                        <Stack.Screen name = {screens.SingleCharacter} component={SingleCharacterComponent}/>
-                      </Stack.Navigator>
-                  )
-                }}/>
-
-                <Drawer.Screen name = "Artifacts" component={() => {
-                  return(
-                      <Stack.Navigator >
-                        <Stack.Screen name = {screens.ListArtifacts} component={ListArtifactComponent}/>
-                        <Stack.Screen name = {screens.SingleArtifact} component={SingleArtifactComponent}/>
-                      </Stack.Navigator>
-                  )
-                }}/>
-
-                <Drawer.Screen name = "Weapons" component={() => {
-                  return(
-                      <Stack.Navigator >
-                        <Stack.Screen name = {screens.ListWeapons} component={ListWeaponComponent}/>
-                        <Stack.Screen name = {screens.SingleWeapon} component={SingleWeaponComponent}/>
-                      </Stack.Navigator>
-                  )
-                }}/>
-
-                <Drawer.Screen name = "Teams" component={() => {
-                  return(
-                      <Stack.Navigator>
-                        <Stack.Screen name = {screens.ListTeams} component={ListTeamComponent}/>
-                        <Stack.Screen name = {screens.SingleTeam} component={SingleTeamComponent}/>
-                        <Stack.Screen name = {screens.ChooseArtifact} component={ListChooseArtifactComponent}/>
-                        <Stack.Screen name = {screens.ChooseWeapon} component={ListChooseWeaponComponent}/>
-                        <Stack.Screen name = {screens.ChooseCharacter} component={ListChooseCharacterComponent}/>
-                      </Stack.Navigator>
-                  )
-                }}/>
-                <Drawer.Screen name = {screens.AccountSettings} component={AccountSettingsComponent}/>
-              </Drawer.Navigator>
-          )
-        }} />
-      </Stack.Navigator>
-    </NavigationContainer>
+      <PaperProvider theme={theme}>
+          <NavigationContainer>
+              <Stack.Navigator initialRouteName={screens.Drawer} screenOptions={{headerShown:false}}>
+                  <Stack.Screen name={screens.Login} component={LoginComponent} />
+                  <Stack.Screen name={screens.Signup} component={SignupComponent} />
+                  <Stack.Screen name={screens.Drawer} component={DrawerComponent} />
+              </Stack.Navigator>
+          </NavigationContainer>
+      </PaperProvider>
   );
+}
+
+let DrawerComponent = ({ navigation }) => {
+    firebase.auth().onAuthStateChanged(user => {
+        if (!user) navigation.navigate(screens.Login)
+    });
+    return(
+        <Drawer.Navigator initialRouteName={screens.Homepage} drawerContent={props => {
+            return (
+                <DrawerContentScrollView {...props}>
+                    <DrawerItemList {...props} />
+                    <DrawerItem label="Logout" onPress={() => {
+                        firebase.auth().signOut().catch(err => {
+                            console.log(err)
+                        })
+                    }} />
+                </DrawerContentScrollView>
+            )
+        }}>
+            <Drawer.Screen name = {screens.Homepage} component={HomePageComponent}/>
+            <Drawer.Screen name = {screens.Characters} component={CharactersComponent}/>
+            <Drawer.Screen name = {screens.Artifacts} component={ArtifactsComponent}/>
+            <Drawer.Screen name = {screens.Weapons} component={WeaponsComponent}/>
+            <Drawer.Screen name = {screens.Teams} component={TeamsComponent}/>
+            <Drawer.Screen name = {screens.AccountSettings} component={AccountSettingsComponent}/>
+        </Drawer.Navigator>
+    )
+}
+
+let CharactersComponent = () => {
+    return (
+        <Stack.Navigator screenOptions={{
+            headerShown: false
+        }}>
+            <Stack.Screen name={screens.ListCharacters} component={ListCharacterComponent}/>
+            <Stack.Screen name={screens.SingleCharacter} component={SingleCharacterComponent}/>
+        </Stack.Navigator>
+    )
+}
+
+let ArtifactsComponent = () => {
+    return(
+        <Stack.Navigator screenOptions={{
+            headerShown: false
+        }}>
+            <Stack.Screen name = {screens.ListArtifacts} component={ListArtifactComponent}/>
+            <Stack.Screen name = {screens.SingleArtifact} component={SingleArtifactComponent}/>
+        </Stack.Navigator>
+    )
+}
+
+let WeaponsComponent = () => {
+    return(
+        <Stack.Navigator screenOptions={{
+            headerShown: false
+        }}>
+            <Stack.Screen name = {screens.ListWeapons} component={ListWeaponComponent}/>
+            <Stack.Screen name = {screens.SingleWeapon} component={SingleWeaponComponent}/>
+        </Stack.Navigator>
+    )
+}
+
+let TeamsComponent = () => {
+    return(
+        <Stack.Navigator screenOptions={{
+            headerShown: false
+        }}>
+            <Stack.Screen name = {screens.ListTeams} component={ListTeamComponent}/>
+            <Stack.Screen name = {screens.SingleTeam} component={SingleTeamComponent}/>
+            <Stack.Screen name = {screens.ChooseArtifact} component={ListChooseArtifactComponent}/>
+            <Stack.Screen name = {screens.ChooseWeapon} component={ListChooseWeaponComponent}/>
+            <Stack.Screen name = {screens.ChooseCharacter} component={ListChooseCharacterComponent}/>
+        </Stack.Navigator>
+    )
 }
