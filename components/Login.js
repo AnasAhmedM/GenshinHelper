@@ -13,6 +13,14 @@ export default function LoginComponent({ navigation }) {
     const [errorMessage, setErrorMessage] = useState("Unknown Error")
     const [checked, setChecked] = useState(false);
 
+    function showError(errorText){
+        setErrorMessage(errorText)
+        setVisible(true)
+        setTimeout(() => {
+            setVisible(false)
+        }, 3000)
+    }
+
     firebase.auth().onAuthStateChanged(user => {
         if (user) {
             if (checked){
@@ -24,9 +32,7 @@ export default function LoginComponent({ navigation }) {
 
     function handleLoginPress() {
         firebase.auth().signInWithEmailAndPassword(email, password).catch(err => {
-            setErrorMessage(err.message)
-            setVisible(true)
-            setTimeout(()=> {setVisible(false)}, 3000)
+            showError(err.message)
         })
     }
 
@@ -37,7 +43,6 @@ export default function LoginComponent({ navigation }) {
                 <TextInput
                     style={styles.textInput}
                     placeholder="Enter Email"
-                    placeholderTextColor="black"
                     onChangeText={setEmail}
                 />
             </View>
@@ -45,7 +50,6 @@ export default function LoginComponent({ navigation }) {
                 <TextInput
                     style={styles.textInput}
                     placeholder="Enter Password"
-                    placeholderTextColor="black"
                     secureTextEntry={true}
                     onChangeText={setPassword}
                 />

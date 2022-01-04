@@ -2,7 +2,7 @@ import { DefaultTheme as paperTheme } from "react-native-paper"
 import { DefaultTheme as navigatorTheme } from '@react-navigation/native';
 
 // console.log(paperTheme)
-console.log(navigatorTheme)
+// console.log(navigatorTheme)
 
 export const myPaperTheme = {
     ...paperTheme,
@@ -10,16 +10,19 @@ export const myPaperTheme = {
 
     colors: {
         ...paperTheme.colors,
-        backdrop: '#000000',
-        background:'#263f96',
+        text: '#ffffff',
+        backdrop: '#ffffff',
+        background:'#4771a6',
         primary: '#4771a6',
         accent: '#4771a6',
     },
+    font:{
+
+    }
 }
 
 export const myNavigatorTheme = {
     ...navigatorTheme,
-    roundness: 2,
     colors: {
         ...navigatorTheme.colors,
         text: "#ffffff",

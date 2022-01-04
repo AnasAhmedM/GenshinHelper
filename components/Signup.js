@@ -48,7 +48,6 @@ export default function SignupComponent({ navigation }) {
                 <TextInput
                     style={styles.textInput}
                     placeholder="Enter Username"
-                    placeholderTextColor="black"
                     onChangeText={setUsername}
                 />
             </View>
@@ -56,7 +55,6 @@ export default function SignupComponent({ navigation }) {
                 <TextInput
                     style={styles.textInput}
                     placeholder="Enter Email"
-                    placeholderTextColor="black"
                     onChangeText={setEmail}
                 />
             </View>
@@ -64,7 +62,6 @@ export default function SignupComponent({ navigation }) {
                 <TextInput
                     style={styles.textInput}
                     placeholder="Enter Password"
-                    placeholderTextColor="black"
                     secureTextEntry={true}
                     onChangeText={setPassword}
                 />
@@ -73,7 +70,6 @@ export default function SignupComponent({ navigation }) {
                 <TextInput
                     style={styles.textInput}
                     placeholder="Enter Password Again"
-                    placeholderTextColor="black"
                     secureTextEntry={true}
                     onChangeText={setPasswordRetype}
                 />

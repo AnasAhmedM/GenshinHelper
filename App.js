@@ -32,7 +32,7 @@ import firebase from "firebase/compat"
 firebase.initializeApp(require("./config/firebaseConfig").firebaseConfig)
 
 const screens = require("./config/ScreensEnum")
-import {myNavigatorTheme, myPaperTheme} from './config/theme'
+import { myNavigatorTheme, myPaperTheme } from './config/theme'
 
 
 export default function App() {
@@ -147,7 +147,7 @@ let WeaponsComponent = () => {
 
 let TeamsComponent = () => {
     return(
-        <Stack.Navigator initialRouteName={screens.SingleTeam} screenOptions={{
+        <Stack.Navigator initialRouteName={screens.ListTeams} screenOptions={{
             headerShown: false
         }}>
             <Stack.Screen name = {screens.ListTeams} component={ListTeamComponent}/>
