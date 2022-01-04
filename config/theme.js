@@ -4,7 +4,7 @@ import { DefaultTheme as navigatorTheme } from '@react-navigation/native';
 // console.log(paperTheme)
 console.log(navigatorTheme)
 
-const myPaperTheme = {
+export const myPaperTheme = {
     ...paperTheme,
     roundness: 2,
 
@@ -17,7 +17,7 @@ const myPaperTheme = {
     },
 }
 
-const myNavigatorTheme = {
+export const myNavigatorTheme = {
     ...navigatorTheme,
     roundness: 2,
     colors: {
@@ -29,6 +29,3 @@ const myNavigatorTheme = {
         accent: '#4771a6',
     },
 }
-
-module.exports.paperTheme = myPaperTheme;
-module.exports.navigatorTheme = myNavigatorTheme;

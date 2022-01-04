@@ -1,16 +1,17 @@
 import { useState } from 'react';
 import { StyleSheet, Text, Image, View, ScrollView } from 'react-native';
 import { List, Card, Title, Subheading, Paragraph, Divider, Avatar} from 'react-native-paper';
+import {myNavigatorTheme} from '../config/theme'
 
 export default function SingleArtifactComponent({ navigation, route }) {
-    const [data, setData] = useState(route.params?.data)
-    const [artifacts, setArtifacts] = useState(route.params?.artifacts)
+    const [data] = useState(route.params?.data)
+    const [artifacts] = useState(route.params?.artifacts)
     return (
         <View style={{flex:1, justifyContent:'center'}}>
         <View style={{height:'100%', borderWidth:1}}>
           <ScrollView>
             <Divider style={{height:1}}/>
-            <Card>
+            <Card style={{backgroundColor: myNavigatorTheme.colors.background}}>
                 <Card.Title
                     title={data.name}
                     subtitle={data.type}
@@ -40,20 +41,21 @@ export default function SingleArtifactComponent({ navigation, route }) {
                 <Divider style={{height:20}}/>
                 <Card.Content>
                     <Title>Bonuses</Title>
-                    <Subheading>Two Piece Bonus</Subheading>
+                    <Subheading style={{fontWeight:'bold'}}>Two Piece Bonus</Subheading>
                     <Paragraph>{data.artifactSet.twoPieceBonus}</Paragraph>
-                    <Subheading>Four Piece Bonus</Subheading>
+                    <Subheading style={{fontWeight:'bold'}}>Four Piece Bonus</Subheading>
                     <Paragraph>{data.artifactSet.fourPieceBonus}</Paragraph>
                 </Card.Content>
                 <Divider style={{height:20}}/>
                 <Card.Content>
-                    <Title>Other Similar Artifacts</Title>
+                    <Title>Other Artifacts of Same Set</Title>
                     {artifacts.map((e) =>{
                         if(e.artifactSet.name === data.artifactSet.name && e.rarity === data.rarity && e.type != data.type)
                         return(
                             <View>
                                 <List.Item
                                     title={e.name}
+                                    titleStyle={{fontWeight:'bold'}}
                                     description={e.type}
                                     left={props=> <Image style={{height:60, width:60, borderRadius:20}} source={{ uri: e.image }}/>}
                                     onPress={()=> navigation.push('SingleArtifact', {data: e, artifacts: artifacts})}

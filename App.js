@@ -32,13 +32,13 @@ import firebase from "firebase/compat"
 firebase.initializeApp(require("./config/firebaseConfig").firebaseConfig)
 
 const screens = require("./config/ScreensEnum")
-const themes = require("./config/theme");
+import {myNavigatorTheme, myPaperTheme} from './config/theme'
 
 
 export default function App() {
   return (
-      <PaperProvider theme={themes.paperTheme}>
-          <NavigationContainer theme={themes.navigatorTheme}>
+      <PaperProvider theme={myPaperTheme}>
+          <NavigationContainer theme={myNavigatorTheme}>
               <Stack.Navigator initialRouteName={screens.Drawer} screenOptions={{headerShown:false}}>
                   <Stack.Screen name={screens.Login} component={LoginComponent} />
                   <Stack.Screen name={screens.Signup} component={SignupComponent} />
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         height: 150,
-        backgroundColor: themes.paperTheme.colors.primary
+        backgroundColor: myPaperTheme.colors.primary
     },
     bannerImage:{
 

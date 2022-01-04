@@ -2,19 +2,24 @@ import {useState, useEffect} from 'react';
 import { StyleSheet, Text, Image, View, ScrollView, Alert } from 'react-native';
 import firebase from "firebase/compat"
 import { List, Divider, Searchbar, Avatar} from 'react-native-paper';
+import {myNavigatorTheme} from '../config/theme'
 firebase.initializeApp(require("../config/firebaseConfig").firebaseConfig)
 
 export default function ListChooseWeaponComponent({ navigation, route }) {
     const [searchQuery, setSearchQuery] = useState('')
     const [data, setData] = useState([])
-    const [rarities, setRarities] = useState(['#555B66', '#4A5F62', '#51597B', '#8F6DA8', '#AA7A4F'])
+    const [rarities] = useState(['#555B66', '#4A5F62', '#51597B', '#8F6DA8', '#AA7A4F'])
 
     useEffect(()=>{
-        if(data.length === 0)
-        firebase.database().ref('gameData/Weapons').once('value', function (snapshot) {
-            setData(snapshot.val())
-          });
+      if(data.length === 0)
+      firebase.database().ref('gameData/Weapons').once('value', function (snapshot) {
+        let values = Object.keys(snapshot.val()).map(function(e) {
+          return snapshot.val()[e]
+        })
+        setData(values)
+        });
     })
+
     return (
         <View style={{flex:1, justifyContent:'center'}}>
         <View style={{height:'100%', borderWidth:1}}>

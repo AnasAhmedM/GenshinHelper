@@ -1,16 +1,23 @@
 import { useState } from 'react';
-import { StyleSheet, Text, Image, View, ScrollView } from 'react-native';
+import { StyleSheet, Text, Image, View, ScrollView, Alert} from 'react-native';
 import { List, Card, Title, Paragraph, Divider, Avatar} from 'react-native-paper';
-
+import {myNavigatorTheme} from '../config/theme'
 export default function SingleCharacterComponent({ navigation, route }) {
-    const [data, setData] = useState(route.params?.data)
-    const [element, setElement] = useState(route.params?.element)
+    const [data] = useState(route.params?.data)
+    const [element] = useState(route.params?.element)
+    
+    const showDesc= (desc) =>{
+        Alert.alert('Description', desc, [
+            { text: 'OK', onPress: () => console.log('OK Pressed') }
+          ]);
+    }
+
     return (
         <View style={{flex:1, justifyContent:'center'}}>
         <View style={{height:'100%', borderWidth:1}}>
           <ScrollView>
             <Divider style={{height:1}}/>
-            <Card>
+            <Card style={{backgroundColor: myNavigatorTheme.colors.background}}>
                 <Card.Title
                     title={data.name}
                     subtitle={data.weapon}
@@ -52,9 +59,10 @@ export default function SingleCharacterComponent({ navigation, route }) {
                             <View>
                                 <List.Item
                                     title={e.name}
+                                    titleStyle={{fontWeight:'bold'}}
                                     description={e.description}
-                                    descriptionNumberOfLines = {50}
                                     left={props=> <Image style={{height:60, width:60, borderRadius:20}} source={{ uri: e.image }}/>}
+                                    onPress={()=>showDesc(e.description)}
                                 />
                                 <Divider style={{height:1}}/>
                             </View>
@@ -62,6 +70,7 @@ export default function SingleCharacterComponent({ navigation, route }) {
                         })
                         }
                 </Card.Content>
+                <Divider style={{height:5}}/>
                 <Card.Content>
                     <Title>Talents</Title>
                     {data.talents.map((e, ind) =>{
@@ -69,10 +78,11 @@ export default function SingleCharacterComponent({ navigation, route }) {
                             <View>
                                 <List.Item
                                     title={e.name}
+                                    titleStyle={{fontWeight:'bold'}}
                                     description={e.description}
-                                    descriptionNumberOfLines = {50}
                                     style={{padding:10}}
                                     left={props=> <Image style={{height:60, width:60, borderRadius:20}} source={{ uri: e.image }}/>}
+                                    onPress={()=>showDesc(e.description)}
                                 />
                                 <Divider style={{height:1}}/>
                             </View>
@@ -94,5 +104,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: '#ecf0f1',
         padding: 8,
-      },
+    },
+    containerStyle : {
+        backgroundColor: 'white',
+        padding: 20
+    }
 });

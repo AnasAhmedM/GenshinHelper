@@ -1,16 +1,16 @@
 import { useState } from 'react';
 import { StyleSheet, Text, Image, View, ScrollView } from 'react-native';
 import { List, Card, Title, Subheading, Paragraph, Divider, Avatar} from 'react-native-paper';
-
+import {myNavigatorTheme} from '../config/theme'
 export default function SingleWeaponComponent({ navigation, route }) {
-    const [data, setData] = useState(route.params?.data)
-    const [weapons, setWeapons] = useState(route.params?.weapons)
+    const [data] = useState(route.params?.data)
+    const [weapons] = useState(route.params?.weapons)
     return (
         <View style={{flex:1, justifyContent:'center'}}>
         <View style={{height:'100%', borderWidth:1}}>
           <ScrollView>
             <Divider style={{height:1}}/>
-            <Card>
+            <Card style={{backgroundColor: myNavigatorTheme.colors.background}}>
                 <Card.Title 
                     title={data.name} 
                     subtitle={data.type}
@@ -44,6 +44,7 @@ export default function SingleWeaponComponent({ navigation, route }) {
                             <View>
                                 <List.Item
                                     title={e.name}
+                                    titleStyle={{fontWeight:'bold'}}
                                     description={e.type}
                                     left={props=> <Image style={{height:60, width:60, borderRadius:20}} source={{ uri: e.image }}/>}
                                     onPress={()=> navigation.push('SingleWeapon', {data: e, weapons: weapons})}
