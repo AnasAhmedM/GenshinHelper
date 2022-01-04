@@ -20,34 +20,25 @@ import ListChooseCharacterComponent from "./components/ListChooseCharacter"
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
-import { Avatar, DefaultTheme, Provider as PaperProvider} from 'react-native-paper';
+import { Avatar, Provider as PaperProvider } from 'react-native-paper';
+import { TouchableOpacity, Text, StyleSheet, View } from "react-native";
+import { useEffect, useState } from "react";
+import { ImageBackground } from "react-native";
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
 import firebase from "firebase/compat"
-import { TouchableOpacity, Text, StyleSheet, View } from "react-native";
-import { useEffect, useState } from "react";
-import { ImageBackground } from "react-native";
 firebase.initializeApp(require("./config/firebaseConfig").firebaseConfig)
 
 const screens = require("./config/ScreensEnum")
-
-const theme = {
-    ...DefaultTheme,
-    roundness: 2,
-    colors: {
-        ...DefaultTheme.colors,
-        primary: '#4771a6',
-        accent: '#4771a6',
-    },
-};
+const themes = require("./config/theme");
 
 
 export default function App() {
   return (
-      <PaperProvider theme={theme}>
-          <NavigationContainer>
+      <PaperProvider theme={themes.paperTheme}>
+          <NavigationContainer theme={themes.navigatorTheme}>
               <Stack.Navigator initialRouteName={screens.Drawer} screenOptions={{headerShown:false}}>
                   <Stack.Screen name={screens.Login} component={LoginComponent} />
                   <Stack.Screen name={screens.Signup} component={SignupComponent} />
@@ -99,12 +90,15 @@ let DrawerComponent = ({ navigation }) => {
                             </View>
                         </ImageBackground>
                     </TouchableOpacity>
+
                     <DrawerItemList {...props} />
+
                     <DrawerItem label="Logout" onPress={() => {
                         firebase.auth().signOut().catch(err => {
                             console.log(err)
                         })
                     }} />
+
                 </DrawerContentScrollView>
             )
         }}>
@@ -172,7 +166,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         height: 150,
-        backgroundColor: theme.colors.primary
+        backgroundColor: themes.paperTheme.colors.primary
     },
     bannerImage:{
 

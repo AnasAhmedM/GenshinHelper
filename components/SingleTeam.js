@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
         right: 10
     },
     singleArtifactContainer:{
-        borderRadius: "100%",
+        borderRadius: 500,
         backgroundColor: "rgba(150,150,150,0.60)",
         margin: 5,
         width: 40,

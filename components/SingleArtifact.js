@@ -11,18 +11,18 @@ export default function SingleArtifactComponent({ navigation, route }) {
           <ScrollView>
             <Divider style={{height:1}}/>
             <Card>
-                <Card.Title 
-                    title={data.name} 
+                <Card.Title
+                    title={data.name}
                     subtitle={data.type}
-                    left={props=>
+                    left={ props =>
                         <View >
                             <Image style={{height:60, width:60, borderRadius:20, alignSelf:'center'}} source={{ uri: data.image}}/>
                         </View>}
                     />
                 <Card.Content style={{flexDirection:'row', justifyContent:'center'}}>
-                    {data.rarity>0?<Avatar.Icon style={{backgroundColor:'transparent'}}color='yellow' size={32} icon="star" />:null} 
+                    {data.rarity>0?<Avatar.Icon style={{backgroundColor:'transparent'}}color='yellow' size={32} icon="star" />:null}
                     {data.rarity>1?<Avatar.Icon style={{backgroundColor:'transparent'}}color='yellow' size={32} icon="star" />:null}
-                    {data.rarity>2?<Avatar.Icon style={{backgroundColor:'transparent'}}color='yellow' size={32} icon="star" />:null}   
+                    {data.rarity>2?<Avatar.Icon style={{backgroundColor:'transparent'}}color='yellow' size={32} icon="star" />:null}
                     {data.rarity>3?<Avatar.Icon style={{backgroundColor:'transparent'}}color='yellow' size={32} icon="star" />:null}
                     {data.rarity>4?<Avatar.Icon style={{backgroundColor:'transparent'}}color='yellow' size={32} icon="star" />:null}
                 </Card.Content>
