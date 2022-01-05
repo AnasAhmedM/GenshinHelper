@@ -10,10 +10,10 @@ export const myPaperTheme = {
 
     colors: {
         ...paperTheme.colors,
-        text: '#ffffff',
-        backdrop: '#ffffff',
-        background:'#4771a6',
-        primary: '#4771a6',
+        text: '#000000',
+        backdrop: 'rgba(255,255,255,0.26)',
+        background:'#ffffff',
+        primary: '#4681bb',
         accent: '#4771a6',
     },
     font:{
@@ -25,8 +25,8 @@ export const myNavigatorTheme = {
     ...navigatorTheme,
     colors: {
         ...navigatorTheme.colors,
-        text: "#ffffff",
-        background: '#70a7ff',
+        text: "#000000",
+        background: '#ffffff',
         card: '#507dbb',
         primary: '#000000',
         accent: '#4771a6',

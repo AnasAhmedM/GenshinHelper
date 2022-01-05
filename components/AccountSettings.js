@@ -4,8 +4,9 @@ import { useState, useEffect } from "react";
 import firebase from "firebase/compat";
 import * as ImagePicker from 'expo-image-picker';
 // const fs = require("fs");
+const screens = require('../config/ScreensEnum')
 
-export default function AccountSettingsComponent() {
+export default function AccountSettingsComponent( { navigation } ) {
     const [init, setInit] = useState(false);
 
     const [newUsername, setNewUsername] = useState("");
@@ -38,7 +39,7 @@ export default function AccountSettingsComponent() {
     useEffect(() => {
         if (!init){
             setInit(true);
-            firebase.database().ref(`userData/${firebase.auth().currentUser.uid}/profilePicture`).once("value").then(snapshot => {
+            firebase.database().ref(`userData/${firebase.auth().currentUser.uid}/profilePicture`).on("value", snapshot => {
                 if (snapshot.val()){
                     setImage({uri: snapshot.val()})
                 }
@@ -52,9 +53,9 @@ export default function AccountSettingsComponent() {
             <TouchableOpacity onPress={pickImage} style={styles.imagePicker}>
                 <Image style={styles.profilePicture} source={image} />
             </TouchableOpacity>
-            <Button mode="contained" style={styles.button} onPress={changeProfilePicture} disabled={!imageUpdated}>
-                <Text>UPDATE PROFILE PICTURE</Text>
-            </Button>
+            {/*<Button mode="contained" style={styles.button} onPress={changeProfilePicture} disabled={!imageUpdated}>*/}
+            {/*    <Text>UPDATE PROFILE PICTURE</Text>*/}
+            {/*</Button>*/}
             <Divider/>
             <View>
                 <Headline style={styles.headerText}>Change Name</Headline>
@@ -157,19 +158,20 @@ export default function AccountSettingsComponent() {
         }, 3000)
     }
     async function pickImage(){
-        let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.All,
-            allowsEditing: true,
-            aspect: [1, 1],
-            quality: 1,
-        });
-
-        console.log(result);
-
-        if (!result.cancelled) {
-            setImageUpdated(true);
-            setImage(result);
-        }
+        navigation.navigate(screens.ChooseProfilePicture)
+        // let result = await ImagePicker.launchImageLibraryAsync({
+        //     mediaTypes: ImagePicker.MediaTypeOptions.All,
+        //     allowsEditing: true,
+        //     aspect: [1, 1],
+        //     quality: 1,
+        // });
+        //
+        // console.log(result);
+        //
+        // if (!result.cancelled) {
+        //     setImageUpdated(true);
+        //     setImage(result);
+        // }
     }
 
 }

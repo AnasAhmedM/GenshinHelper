@@ -13,11 +13,13 @@ module.exports = {
     ChooseArtifact: "ChooseArtifact",
     ChooseWeapon: "ChooseWeapon",
     ChooseCharacter: "ChooseCharacter",
+    ChooseProfilePicture: "ChooseProfilePicture",
 
     Drawer: "Drawer",
     Homepage: "Home",
     Characters: "Characters",
     Artifacts: "Artifacts",
     Weapons: "Weapons",
-    Teams: "Teams"
+    Teams: "Teams",
+    Settings: "Settings"
 };

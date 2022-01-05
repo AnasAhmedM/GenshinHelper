@@ -32,12 +32,22 @@ export default function ListChooseArtifactComponent({ navigation, route }) {
           />
           <ScrollView>
             {data.map((e, ind) =>{
-              if(e.name.toLowerCase().includes(searchQuery.toLowerCase()))
+              if(e.name.toLowerCase().includes(searchQuery.toLowerCase()) && getArtifactType(route.params.artifactId) === e.type)
               return(
                   <View key={ind}>
                     <List.Item
                         title={e.name}
                         description={e.type}
+                        onPress={() => {
+                            if (route.params.teamId !== null && route.params.characterNo !== null){
+                                // console.log({name: e.name, image: e.image})
+                                firebase
+                                    .database()
+                                    .ref(`userData/${firebase.auth().currentUser.uid}/teams/${route.params.teamId}/characters/${route.params.characterNo}/artifacts/${route.params.artifactId}`)
+                                    .set(e.id)
+                                navigation.goBack()
+                            }
+                        }}
                         left={props=> <Image style={{height:60, width:60, borderRadius:20, alignSelf:'center', backgroundColor:rarities[e.rarity-1]}} source={{ uri: e.image }}/>}
                     />
                     <Divider/>
@@ -49,6 +59,22 @@ export default function ListChooseArtifactComponent({ navigation, route }) {
         </View>
       </View>
     );
+}
+
+function getArtifactType(index){
+    switch (index){
+        case 0:
+            return "Flower of Life"
+        case 1:
+            return "Plume of Death"
+        case 2:
+            return "Sands of Eon"
+        case 3:
+            return "Goblet of Eonothem"
+        case 4:
+            return "Circlet of Logos"
+
+    }
 }
 
 const styles = StyleSheet.create({

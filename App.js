@@ -1,6 +1,7 @@
 import LoginComponent from "./components/Login"
 import SignupComponent from "./components/Signup"
 import AccountSettingsComponent from "./components/AccountSettings"
+import ListChooseProfilePictureComponent from "./components/ListChooseProfilePicture";
 import HomePageComponent from "./components/HomePage"
 
 import ListArtifactComponent from "./components/ListArtifact"
@@ -107,8 +108,19 @@ let DrawerComponent = ({ navigation }) => {
             <Drawer.Screen name = {screens.Artifacts} component={ArtifactsComponent}/>
             <Drawer.Screen name = {screens.Weapons} component={WeaponsComponent}/>
             <Drawer.Screen name = {screens.Teams} component={TeamsComponent}/>
-            <Drawer.Screen name = {screens.AccountSettings} component={AccountSettingsComponent}/>
+            <Drawer.Screen name = {screens.Settings} component={SettingsComponent}/>
         </Drawer.Navigator>
+    )
+}
+
+let SettingsComponent = () => {
+    return (
+        <Stack.Navigator screenOptions={{
+            headerShown: false
+        }}>
+            <Stack.Screen name={screens.AccountSettings} component={AccountSettingsComponent}/>
+            <Stack.Screen name={screens.ChooseProfilePicture} component={ListChooseProfilePictureComponent}/>
+        </Stack.Navigator>
     )
 }
 
@@ -157,7 +169,6 @@ let TeamsComponent = () => {
             <Stack.Screen name = {screens.ChooseCharacter} component={ListChooseCharacterComponent}/>
         </Stack.Navigator>
     )
-
 }
 
 const styles = StyleSheet.create({
@@ -169,7 +180,7 @@ const styles = StyleSheet.create({
         backgroundColor: myPaperTheme.colors.primary
     },
     bannerImage:{
-
+        elevation: 10
     },
     bannerItemsContainer:{
         height: "100%",
@@ -181,8 +192,10 @@ const styles = StyleSheet.create({
         height: "100%",
     },
     bannerText: {
+        color: myNavigatorTheme.colors.primary,
         fontWeight: "bold",
-        fontSize: 20
+        fontSize: 20,
+        elevation: 10
     }
 })
 

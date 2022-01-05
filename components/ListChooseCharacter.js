@@ -11,6 +11,7 @@ export default function ListChooseCharacterComponent({ navigation, route }) {
     const [data, setData] = useState([])
     const [elements, setElements] = useState({})
     const [rarities] = useState(['#8F6DA8', '#AA7A4F'])
+    const [init, setInit] = useState(false)
 
     useEffect(()=>{
         if(data.length === 0)
@@ -25,7 +26,8 @@ export default function ListChooseCharacterComponent({ navigation, route }) {
           let values = Object.keys(snapshot.val()).map(function(e) {
             return snapshot.val()[e]
           })
-          setElements(values)
+            setElements(values)
+            setInit(true)
         });
     })
 
@@ -40,20 +42,58 @@ export default function ListChooseCharacterComponent({ navigation, route }) {
           />
           <ScrollView>
             {data.map((e, ind) =>{
-              if(e.id.includes(searchQuery.toLowerCase()))
+              if(e.id.includes(searchQuery.toLowerCase()) && (route.params.type === null || e.weapon === route.params.type))
               return(
                   <View key={ind}>
                     <List.Item
                         title={e.name}
                         description={e.description}
+                        onPress={() => {
+                            // console.log(route.params.teamId, route.params.characterNo)
+                            if (route.params.teamId !== null && route.params.characterNo !== null){
+                                // console.log({name: e.name, image: e.image})
+                                firebase
+                                    .database()
+                                    .ref(`userData/${firebase.auth().currentUser.uid}/teams/${route.params.teamId}/characters/${route.params.characterNo}/character`)
+                                    .set(e.id)
+                                navigation.goBack()
+                            }
+                        }}
                         left={props=> <Image  style={{height:80, width:80, backgroundColor:rarities[e.rarity-4], borderRadius:20, alignSelf:'center'}} source={{ uri: e.icon }}/>}
                         right={props=> <Image style={{height:40, width:40, borderRadius:20, alignSelf:'center'}} source={{ uri: elements[e.element] }}/>}
                     />
                     <Divider/>
                   </View>
                 )
-              })
-              }
+              })}
+
+              {(route.params.type && init) && <Text style={styles.dividerText}>The characters under this cannot not use the selected weapon</Text>}
+
+              {data.map((e, ind) =>{
+                  if(e.id.includes(searchQuery.toLowerCase()) && !(route.params.type === null || e.weapon === route.params.type))
+                  return(
+                      <View key={ind}>
+                          <List.Item
+                              title={e.name}
+                              description={e.description}
+                              onPress={() => {
+                                  // console.log(route.params.teamId, route.params.characterNo)
+                                  if (route.params.teamId !== null && route.params.characterNo !== null){
+                                      // console.log({name: e.name, image: e.image})
+                                      firebase
+                                          .database()
+                                          .ref(`userData/${firebase.auth().currentUser.uid}/teams/${route.params.teamId}/characters/${route.params.characterNo}/character`)
+                                          .set(e.id)
+                                      navigation.goBack()
+                                  }
+                              }}
+                              left={props=> <Image  style={{height:80, width:80, backgroundColor:rarities[e.rarity-4], borderRadius:20, alignSelf:'center'}} source={{ uri: e.icon }}/>}
+                              right={props=> <Image style={{height:40, width:40, borderRadius:20, alignSelf:'center'}} source={{ uri: elements[e.element] }}/>}
+                          />
+                          <Divider/>
+                      </View>
+                  )
+              })}
           </ScrollView>
         </View>
       </View>
@@ -66,5 +106,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: '#ecf0f1',
         padding: 8,
-      },
+    },
+    dividerText:{
+        color:myNavigatorTheme.colors.text,
+        width:"70%", alignSelf: "center",
+        textAlign:"center"
+    }
 });
