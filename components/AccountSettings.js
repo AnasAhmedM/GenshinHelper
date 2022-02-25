@@ -1,12 +1,12 @@
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Platform, Image } from 'react-native';
-import { Button, Headline, Snackbar, TextInput, ProgressBar, Modal, Portal, Divider } from "react-native-paper";
-import { useState, useEffect } from "react";
+import {Image, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Button, Divider, Headline, Modal, Portal, Snackbar, TextInput} from "react-native-paper";
+import {useEffect, useState} from "react";
 import firebase from "firebase/compat";
 import * as ImagePicker from 'expo-image-picker';
 // const fs = require("fs");
 const screens = require('../config/ScreensEnum')
 
-export default function AccountSettingsComponent( { navigation } ) {
+export default function AccountSettingsComponent({navigation}) {
     const [init, setInit] = useState(false);
 
     const [newUsername, setNewUsername] = useState("");
@@ -28,7 +28,7 @@ export default function AccountSettingsComponent( { navigation } ) {
     useEffect(() => {
         (async () => {
             if (Platform.OS !== 'web') {
-                const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+                const {status} = await ImagePicker.requestMediaLibraryPermissionsAsync();
                 if (status !== 'granted') {
                     alert('Sorry, we need camera roll permissions to make this work!');
                 }
@@ -37,10 +37,10 @@ export default function AccountSettingsComponent( { navigation } ) {
     }, []);
 
     useEffect(() => {
-        if (!init){
+        if (!init) {
             setInit(true);
             firebase.database().ref(`userData/${firebase.auth().currentUser.uid}/profilePicture`).on("value", snapshot => {
-                if (snapshot.val()){
+                if (snapshot.val()) {
                     setImage({uri: snapshot.val()})
                 }
             })
@@ -51,7 +51,7 @@ export default function AccountSettingsComponent( { navigation } ) {
         <ScrollView style={styles.container}>
             <Headline style={styles.headerText}>Change Profile Picture</Headline>
             <TouchableOpacity onPress={pickImage} style={styles.imagePicker}>
-                <Image style={styles.profilePicture} source={image} />
+                <Image style={styles.profilePicture} source={image}/>
             </TouchableOpacity>
             {/*<Button mode="contained" style={styles.button} onPress={changeProfilePicture} disabled={!imageUpdated}>*/}
             {/*    <Text>UPDATE PROFILE PICTURE</Text>*/}
@@ -92,7 +92,7 @@ export default function AccountSettingsComponent( { navigation } ) {
             </Snackbar>
             <Portal style={styles.modelContainerStyle}>
                 <Modal visible={modelVisible} onDismiss={hideModal} contentContainerStyle={styles.modelStyle}>
-                    <Text>Example Modal.  Click outside this area to dismiss.</Text>
+                    <Text>Example Modal. Click outside this area to dismiss.</Text>
                 </Modal>
             </Portal>
         </ScrollView>
@@ -124,16 +124,18 @@ export default function AccountSettingsComponent( { navigation } ) {
         //     });
         // });
     }
+
     function handleUsernameChange() {
-        if(newUsername.trim() !== ""){
+        if (newUsername.trim() !== "") {
             firebase.database().ref(`userData/${firebase.auth().currentUser.uid}/username`).set(newUsername)
             showSnackbarMessage("Username Updated")
-        }else{
+        } else {
             showSnackbarMessage("Username cannot be empty")
         }
     }
-    function handlePasswordChange(){
-        if (newPassword === newPassword2){
+
+    function handlePasswordChange() {
+        if (newPassword === newPassword2) {
             const credential = firebase.auth.EmailAuthProvider.credential(
                 firebase.auth().currentUser.email,
                 oldPassword
@@ -146,18 +148,20 @@ export default function AccountSettingsComponent( { navigation } ) {
                     showSnackbarMessage("Failed to update Password");
                 });
             })
-        }else{
+        } else {
             showSnackbarMessage("Passwords do not match")
         }
     }
-    function showSnackbarMessage(errorText){
+
+    function showSnackbarMessage(errorText) {
         setErrorMessage(errorText)
         setVisible(true)
         setTimeout(() => {
             setVisible(false)
         }, 3000)
     }
-    async function pickImage(){
+
+    async function pickImage() {
         navigation.navigate(screens.ChooseProfilePicture)
         // let result = await ImagePicker.launchImageLibraryAsync({
         //     mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -177,35 +181,35 @@ export default function AccountSettingsComponent( { navigation } ) {
 }
 
 const styles = StyleSheet.create({
-    container:{
+    container: {
         flex: 1
     },
-    inputField:{
+    inputField: {
         margin: 10
     },
-    headerText:{
+    headerText: {
         marginTop: 20,
         textAlign: "center"
     },
-    button:{
+    button: {
         alignSelf: "center",
         width: "60%",
         margin: 10,
     },
-    imagePicker:{
+    imagePicker: {
         width: "100%",
         height: 200,
         justifyContent: "center",
         alignItems: "center",
     },
-    profilePicture:{
+    profilePicture: {
         borderRadius: 500,
         width: 200,
         height: 200,
-        borderWidth:1,
-        margin:10
+        borderWidth: 1,
+        margin: 10
     },
-    modelContainerStyle:{
+    modelContainerStyle: {
         borderWidth: 10,
         backgroundColor: "rgba(0,0,0,0)"
     },

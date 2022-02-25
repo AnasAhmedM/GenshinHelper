@@ -1,5 +1,5 @@
-import { DefaultTheme as paperTheme } from "react-native-paper"
-import { DefaultTheme as navigatorTheme } from '@react-navigation/native';
+import {DefaultTheme as paperTheme} from "react-native-paper"
+import {DefaultTheme as navigatorTheme} from '@react-navigation/native';
 
 // console.log(paperTheme)
 // console.log(navigatorTheme)

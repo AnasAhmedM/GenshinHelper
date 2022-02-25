@@ -1,11 +1,11 @@
-import { useState } from 'react';
-import { ImageBackground, StyleSheet, Text, View } from 'react-native';
-import { TextInput, Button, Avatar, Snackbar, Checkbox  } from 'react-native-paper';
+import {useState} from 'react';
+import {ImageBackground, StyleSheet, Text, View} from 'react-native';
+import {Avatar, Button, Snackbar, TextInput} from 'react-native-paper';
 import firebase from "firebase/compat"
 // import * as SecureStore from 'expo-secure-store';
 const screens = require("../config/ScreensEnum")
 
-export default function SignupComponent({ navigation }) {
+export default function SignupComponent({navigation}) {
     const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -21,19 +21,21 @@ export default function SignupComponent({ navigation }) {
                     const user = userCredentials.user
                     firebase.database().ref(`userData/${user.uid}`).set({
                         username: username.trim()
-                    }).then(() => {navigation.navigate(screens.Drawer)})
+                    }).then(() => {
+                        navigation.navigate(screens.Drawer)
+                    })
                 }).catch(err => {
                     showError(err.message)
                 })
-            }else{
+            } else {
                 showError("Username cannot be empty")
             }
-        }else{
+        } else {
             showError("Passwords do not match")
         }
     }
 
-    function showError(errorText){
+    function showError(errorText) {
         setErrorMessage(errorText)
         setVisible(true)
         setTimeout(() => {
@@ -43,7 +45,7 @@ export default function SignupComponent({ navigation }) {
 
     return (
         <ImageBackground source={require("../assets/images/wallpaper.jpg")} style={styles.container}>
-            <Avatar.Image source={require("../assets/images/iconMain.png")} size={150} style={styles.iconImage} />
+            <Avatar.Image source={require("../assets/images/iconMain.png")} size={150} style={styles.iconImage}/>
             <View style={styles.inputView}>
                 <TextInput
                     style={styles.textInput}
@@ -78,7 +80,9 @@ export default function SignupComponent({ navigation }) {
                 <Text>SIGNUP</Text>
             </Button>
 
-            <Text style={{textAlign: "center"}} onPress={()=> {navigation.navigate(screens.Login)}}>Already have an account? Login here</Text>
+            <Text style={{textAlign: "center"}} onPress={() => {
+                navigation.navigate(screens.Login)
+            }}>Already have an account? Login here</Text>
 
             <Snackbar
                 visible={visible}>
@@ -93,15 +97,15 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center"
     },
-    inputView:{
+    inputView: {
         margin: 20,
         marginBottom: 10,
         marginTop: 10
     },
-    loginBtn:{
+    loginBtn: {
         margin: 20
     },
-    iconImage:{
+    iconImage: {
         borderWidth: 0,
         alignSelf: "center"
     }

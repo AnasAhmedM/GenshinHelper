@@ -18,40 +18,42 @@ import ListChooseArtifactComponent from "./components/ListChooseArtifact"
 import ListChooseWeaponComponent from "./components/ListChooseWeapon"
 import ListChooseCharacterComponent from "./components/ListChooseCharacter"
 
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
-import { Avatar, Provider as PaperProvider } from 'react-native-paper';
-import { TouchableOpacity, Text, StyleSheet, View } from "react-native";
-import { useEffect, useState } from "react";
-import { ImageBackground } from "react-native";
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {createDrawerNavigator, DrawerContentScrollView, DrawerItem, DrawerItemList} from '@react-navigation/drawer';
+import {Avatar, Provider as PaperProvider} from 'react-native-paper';
+import {ImageBackground, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {useEffect, useState} from "react";
+import firebase from "firebase/compat"
+import {myNavigatorTheme, myPaperTheme} from './config/theme'
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
-import firebase from "firebase/compat"
 firebase.initializeApp(require("./config/firebaseConfig").firebaseConfig)
 
 const screens = require("./config/ScreensEnum")
-import { myNavigatorTheme, myPaperTheme } from './config/theme'
 
 
 export default function App() {
-  return (
-      <PaperProvider theme={myPaperTheme}>
-          <NavigationContainer theme={myNavigatorTheme}>
-              <Stack.Navigator initialRouteName={screens.Drawer} screenOptions={{headerShown:false}}>
-                  <Stack.Screen name={screens.Login} component={LoginComponent} />
-                  <Stack.Screen name={screens.Signup} component={SignupComponent} />
-                  <Stack.Screen name={screens.Drawer} component={DrawerComponent} />
-              </Stack.Navigator>
-          </NavigationContainer>
-      </PaperProvider>
-  );
+    return (
+        <PaperProvider theme={myPaperTheme}>
+            <NavigationContainer theme={myNavigatorTheme}>
+                <Stack.Navigator initialRouteName={screens.Drawer} screenOptions={{headerShown: false}}>
+                    <Stack.Screen name={screens.Login} component={LoginComponent}/>
+                    <Stack.Screen name={screens.Signup} component={SignupComponent}/>
+                    <Stack.Screen name={screens.Drawer} component={DrawerComponent}/>
+                </Stack.Navigator>
+            </NavigationContainer>
+        </PaperProvider>
+    );
 }
 
-let DrawerComponent = ({ navigation }) => {
-    const [currentUserData, setCurrentUserData] = useState({username:"", profilePicture: require("./assets/images/defaultProfilePicture.png")});
+let DrawerComponent = ({navigation}) => {
+    const [currentUserData, setCurrentUserData] = useState({
+        username: "",
+        profilePicture: require("./assets/images/defaultProfilePicture.png")
+    });
     const [init, setInit] = useState(false)
     useEffect(() => {
         if (!init) {
@@ -63,7 +65,7 @@ let DrawerComponent = ({ navigation }) => {
                         const value = snapshot.val()
                         setCurrentUserData({
                             username: value.username,
-                            profilePicture: value.profilePicture === undefined ? currentUserData.profilePicture : { uri: value.profilePicture }
+                            profilePicture: value.profilePicture === undefined ? currentUserData.profilePicture : {uri: value.profilePicture}
                         })
                     })
                 }
@@ -72,11 +74,13 @@ let DrawerComponent = ({ navigation }) => {
         }
     })
 
-    return(
+    return (
         <Drawer.Navigator initialRouteName={screens.Homepage} drawerContent={props => {
             return (
                 <DrawerContentScrollView {...props}>
-                    <TouchableOpacity style={styles.banner} onPress={() => {props.navigation.navigate(screens.AccountSettings)}}>
+                    <TouchableOpacity style={styles.banner} onPress={() => {
+                        props.navigation.navigate(screens.AccountSettings)
+                    }}>
                         <ImageBackground
                             source={require("./assets/images/wallpaper.jpg")}
                             resizeMode="cover"
@@ -98,17 +102,17 @@ let DrawerComponent = ({ navigation }) => {
                         firebase.auth().signOut().catch(err => {
                             console.log(err)
                         })
-                    }} />
+                    }}/>
 
                 </DrawerContentScrollView>
             )
         }}>
-            <Drawer.Screen name = {screens.Homepage} component={HomePageComponent}/>
-            <Drawer.Screen name = {screens.Characters} component={CharactersComponent}/>
-            <Drawer.Screen name = {screens.Artifacts} component={ArtifactsComponent}/>
-            <Drawer.Screen name = {screens.Weapons} component={WeaponsComponent}/>
-            <Drawer.Screen name = {screens.Teams} component={TeamsComponent}/>
-            <Drawer.Screen name = {screens.Settings} component={SettingsComponent}/>
+            <Drawer.Screen name={screens.Homepage} component={HomePageComponent}/>
+            <Drawer.Screen name={screens.Characters} component={CharactersComponent}/>
+            <Drawer.Screen name={screens.Artifacts} component={ArtifactsComponent}/>
+            <Drawer.Screen name={screens.Weapons} component={WeaponsComponent}/>
+            <Drawer.Screen name={screens.Teams} component={TeamsComponent}/>
+            <Drawer.Screen name={screens.Settings} component={SettingsComponent}/>
         </Drawer.Navigator>
     )
 }
@@ -136,58 +140,58 @@ let CharactersComponent = () => {
 }
 
 let ArtifactsComponent = () => {
-    return(
+    return (
         <Stack.Navigator screenOptions={{
             headerShown: false
         }}>
-            <Stack.Screen name = {screens.ListArtifacts} component={ListArtifactComponent}/>
-            <Stack.Screen name = {screens.SingleArtifact} component={SingleArtifactComponent}/>
+            <Stack.Screen name={screens.ListArtifacts} component={ListArtifactComponent}/>
+            <Stack.Screen name={screens.SingleArtifact} component={SingleArtifactComponent}/>
         </Stack.Navigator>
     )
 }
 
 let WeaponsComponent = () => {
-    return(
+    return (
         <Stack.Navigator screenOptions={{
             headerShown: false
         }}>
-            <Stack.Screen name = {screens.ListWeapons} component={ListWeaponComponent}/>
-            <Stack.Screen name = {screens.SingleWeapon} component={SingleWeaponComponent}/>
+            <Stack.Screen name={screens.ListWeapons} component={ListWeaponComponent}/>
+            <Stack.Screen name={screens.SingleWeapon} component={SingleWeaponComponent}/>
         </Stack.Navigator>
     )
 }
 
 let TeamsComponent = () => {
-    return(
+    return (
         <Stack.Navigator initialRouteName={screens.ListTeams} screenOptions={{
             headerShown: false
         }}>
-            <Stack.Screen name = {screens.ListTeams} component={ListTeamComponent}/>
-            <Stack.Screen name = {screens.SingleTeam} component={SingleTeamComponent}/>
-            <Stack.Screen name = {screens.ChooseArtifact} component={ListChooseArtifactComponent}/>
-            <Stack.Screen name = {screens.ChooseWeapon} component={ListChooseWeaponComponent}/>
-            <Stack.Screen name = {screens.ChooseCharacter} component={ListChooseCharacterComponent}/>
+            <Stack.Screen name={screens.ListTeams} component={ListTeamComponent}/>
+            <Stack.Screen name={screens.SingleTeam} component={SingleTeamComponent}/>
+            <Stack.Screen name={screens.ChooseArtifact} component={ListChooseArtifactComponent}/>
+            <Stack.Screen name={screens.ChooseWeapon} component={ListChooseWeaponComponent}/>
+            <Stack.Screen name={screens.ChooseCharacter} component={ListChooseCharacterComponent}/>
         </Stack.Navigator>
     )
 }
 
 const styles = StyleSheet.create({
-    banner:{
+    banner: {
         width: "100%",
         justifyContent: "center",
         alignItems: "center",
         height: 150,
         backgroundColor: myPaperTheme.colors.primary
     },
-    bannerImage:{
+    bannerImage: {
         elevation: 10
     },
-    bannerItemsContainer:{
+    bannerItemsContainer: {
         height: "100%",
         justifyContent: "center",
         padding: 20
     },
-    bannerBackground:{
+    bannerBackground: {
         width: "100%",
         height: "100%",
     },

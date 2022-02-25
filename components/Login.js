@@ -1,11 +1,12 @@
-import { useState, useEffect } from 'react';
-import { ImageBackground, StyleSheet, Text, View } from 'react-native';
-import { TextInput, Button, Avatar, Snackbar, Checkbox  } from 'react-native-paper';
+import {useEffect, useState} from 'react';
+import {ImageBackground, StyleSheet, Text, View} from 'react-native';
+import {Avatar, Button, Checkbox, Snackbar, TextInput} from 'react-native-paper';
 import firebase from "firebase/compat"
 import * as SecureStore from 'expo-secure-store';
+
 const screens = require("../config/ScreensEnum")
 
-export default function LoginComponent({ navigation }) {
+export default function LoginComponent({navigation}) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("")
 
@@ -15,7 +16,7 @@ export default function LoginComponent({ navigation }) {
 
     const [init, setInit] = useState(false)
 
-    function showError(errorText){
+    function showError(errorText) {
         setErrorMessage(errorText)
         setVisible(true)
         setTimeout(() => {
@@ -24,13 +25,12 @@ export default function LoginComponent({ navigation }) {
     }
 
 
-
     function handleLoginPress() {
-        firebase.auth().signInWithEmailAndPassword(email, password).then(()=>{
+        firebase.auth().signInWithEmailAndPassword(email, password).then(() => {
             if (checked) {
                 SecureStore.setItemAsync("email", email);
                 SecureStore.setItemAsync("password", password);
-            }else{
+            } else {
                 SecureStore.deleteItemAsync("email");
                 SecureStore.deleteItemAsync("password");
             }
@@ -39,9 +39,8 @@ export default function LoginComponent({ navigation }) {
         })
     }
 
-    useEffect(async ()=>{
-        if (!init){
-
+    useEffect(async () => {
+        if (!init) {
             firebase.auth().onAuthStateChanged(user => {
                 if (user) {
                     navigation.navigate(screens.Drawer)
@@ -50,7 +49,7 @@ export default function LoginComponent({ navigation }) {
 
             let email = await SecureStore.getItemAsync("email");
             let password = await SecureStore.getItemAsync("password");
-            if (email && password){
+            if (email && password) {
                 setEmail(email);
                 setPassword(password);
                 setChecked(true)
@@ -61,7 +60,7 @@ export default function LoginComponent({ navigation }) {
 
     return (
         <ImageBackground source={require("../assets/images/wallpaper.jpg")} style={styles.container}>
-            <Avatar.Image source={require("../assets/images/iconMain.png")} size={150} style={styles.iconImage} />
+            <Avatar.Image source={require("../assets/images/iconMain.png")} size={150} style={styles.iconImage}/>
             <View style={styles.inputView}>
                 <TextInput
                     style={styles.textInput}
@@ -93,14 +92,16 @@ export default function LoginComponent({ navigation }) {
                 <Text>LOGIN</Text>
             </Button>
 
-            <Text style={{textAlign: "center"}} onPress={()=> {navigation.navigate(screens.Signup)}}>Don't have an account? Signup here</Text>
+            <Text style={{textAlign: "center"}} onPress={() => {
+                navigation.navigate(screens.Signup)
+            }}>Don't have an account? Signup here</Text>
 
             <Snackbar
                 visible={visible}>
                 {errorMessage}
             </Snackbar>
         </ImageBackground>
-  );
+    );
 }
 
 const styles = StyleSheet.create({
@@ -108,15 +109,15 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center"
     },
-    inputView:{
+    inputView: {
         margin: 20,
         marginBottom: 10,
         marginTop: 10
     },
-    loginBtn:{
+    loginBtn: {
         margin: 20
     },
-    iconImage:{
+    iconImage: {
         borderWidth: 0,
         alignSelf: "center"
     }
